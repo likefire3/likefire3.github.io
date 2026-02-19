@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GCSE Exam Countdown 2026</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #444; padding: 8px; text-align: left; }
+        th { background: #eee; }
+        .past { color: gray; }
+        .today { color: orange; font-weight: bold; }
+        .upcoming { color: green; }
+    </style>
+</head>
+<body>
+<h1>GCSE Exam Countdown 2026</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Exam</th>
+            <th>Board</th>
+            <th>Days Until</th>
+        </tr>
+    </thead>
+    <tbody id="examList"></tbody>
+</table>
+
+<script>
+const exams = [
+    // AQA Triple Science
+    { date: "2026-05-12", name: "Biology Paper 1", board: "AQA" },
+    { date: "2026-06-08", name: "Biology Paper 2", board: "AQA" },
+    { date: "2026-05-18", name: "Chemistry Paper 1", board: "AQA" },
+    { date: "2026-06-12", name: "Chemistry Paper 2", board: "AQA" },
+    { date: "2026-05-22", name: "Physics Paper 1", board: "AQA" },
+    { date: "2026-06-15", name: "Physics Paper 2", board: "AQA" },
+
+    // AQA English
+    { date: "2026-05-21", name: "English Language Paper 1", board: "AQA" },
+    { date: "2026-06-05", name: "English Language Paper 2", board: "AQA" },
+    { date: "2026-05-19", name: "English Literature Paper 1", board: "AQA" },
+    { date: "2026-05-19", name: "English Literature Paper 2", board: "AQA" },
+
+    // AQA Maths & Further Maths
+    { date: "2026-05-14", name: "Maths Paper 1 (Non‑Calculator)", board: "AQA" },
+    { date: "2026-06-03", name: "Maths Paper 2 (Calculator)", board: "AQA" },
+    { date: "2026-06-10", name: "Maths Paper 3 (Calculator)", board: "AQA" },
+    { date: "2026-06-05", name: "Further Maths Paper 1", board: "AQA" },
+    { date: "2026-06-12", name: "Further Maths Paper 2", board: "AQA" },
+
+    // AQA PE
+    { date: "2026-06-09", name: "PE Paper 1", board: "AQA" },
+    { date: "2026-06-09", name: "PE Paper 2", board: "AQA" }, // Example date
+
+    // OCR Computer Science
+    { date: "2026-05-13", name: "Computer Science Paper 1", board: "OCR" },
+    { date: "2026-05-20", name: "Computer Science Paper 2", board: "OCR" },
+
+    // OCR Geography Type B
+    { date: "2026-05-13", name: "Geography Paper 1", board: "OCR" },
+    { date: "2026-05-21", name: "Geography Paper 2", board: "OCR" },
+    { date: "2026-06-04", name: "Geography Paper 3", board: "OCR" }, // Example
+
+    // Edexcel Business
+    { date: "2026-05-11", name: "Business Paper 1", board: "Edexcel" },
+    { date: "2026-05-19", name: "Business Paper 2", board: "Edexcel" }
+];
+
+// Render table
+function renderExams() {
+    const tbody = document.getElementById("examList");
+    const today = new Date();
+    exams.sort((a,b) => new Date(a.date) - new Date(b.date));
+    tbody.innerHTML = "";
+    exams.forEach(e => {
+        const examDate = new Date(e.date);
+        let diff = Math.ceil((examDate - today)/(1000*60*60*24));
+        if (diff < 0) diff = 0;
+        let cls = diff === 0 ? "today" : (examDate < today ? "past" : "upcoming");
+        const row = document.createElement("tr");
+        row.className = cls;
+        row.innerHTML = `
+            <td>${examDate.toDateString()}</td>
+            <td>${e.name}</td>
+            <td>${e.board}</td>
+            <td>${diff}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+renderExams();
+</script>
+</body>
+</html>

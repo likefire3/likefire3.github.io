@@ -1,155 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GCSE Exam Countdown 2026</title>
   <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#60a5fa;
-      --ok:#10b981; --warn:#f59e0b;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      color-scheme: dark;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 12px;
+      background: #0f1724;
+      color: #e6eef8;
     }
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071026 0%, #061622 100%);color:#e6eef8}
-    .wrap{max-width:980px;margin:18px auto;padding:12px}
-    header{display:flex;gap:12px;align-items:center;justify-content:space-between}
-    h1{font-size:1.25rem;margin:0}
-    p.lead{margin:4px 0 0;color:var(--muted);font-size:0.95rem}
-    /* table for wide screens */
-    .table{width:100%;border-collapse:collapse;margin-top:14px;display:table}
-    .thead{display:table-header-group}
-    .tr{display:table-row}
-    .th,.td{display:table-cell;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle}
-    .th{color:var(--muted);font-weight:600;background:rgba(255,255,255,0.02)}
-    /* cards for mobile */
-    .cards{display:none;margin-top:12px;gap:10px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
-    .row{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
-    .exam-name{font-weight:600}
-    .meta{color:var(--muted);font-size:0.9rem}
-    .days{font-size:1.05rem;font-weight:700}
-    .badge{padding:6px 8px;border-radius:999px;font-size:0.78rem}
-    .past{opacity:0.55}
-    .today{color:var(--warn)}
-    .upcoming{color:var(--ok)}
-    /* responsive switch */
+    h1 { font-size: 1.3rem; margin-bottom: 4px; text-align: center; }
+    p.lead { text-align: center; color: #94a3b8; margin-top: 0; font-size: 0.95rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; display: table; }
+    th, td { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 10px; text-align: left; }
+    th { color: #94a3b8; background: rgba(255,255,255,0.02); }
+    .cards { display: none; flex-direction: column; gap: 10px; margin-top: 12px; }
+    .card { background: rgba(255,255,255,0.02); padding: 12px; border-radius: 10px; }
+    .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    .exam-name { font-weight: 600; }
+    .meta { color: #94a3b8; font-size: 0.9rem; }
+    .days { font-weight: 700; }
+    .past { opacity: 0.55; }
+    .today { color: #f59e0b; font-weight: 700; }
+    .upcoming { color: #10b981; font-weight: 700; }
     @media (max-width:820px){
-      .table{display:none}
-      .cards{display:flex;flex-direction:column}
-      h1{font-size:1.05rem}
+      table { display: none; }
+      .cards { display: flex; }
     }
-    /* tiny tweaks */
-    small{color:var(--muted)}
-    footer{margin-top:18px;color:var(--muted);font-size:0.88rem;text-align:center}
+    footer { margin-top: 18px; color: #94a3b8; font-size: 0.88rem; text-align: center; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div>
-        <h1>GCSE Exam Countdown — Summer 2026</h1>
-        <p class="lead">All papers for AQA (your subjects), OCR (CompSci & Geography B) and Edexcel (Business). Dates from the official timetables.</p>
-      </div>
-      <div>
-        <small>Updated from boards' timetables</small>
-      </div>
-    </header>
+  <h1>GCSE Exam Countdown — Summer 2026</h1>
+  <p class="lead">All papers for AQA, OCR, and Edexcel. Dates from official timetables.</p>
 
-    <!-- Desktop table -->
-    <div class="table" role="table" aria-label="Exam countdown table">
-      <div class="thead tr">
-        <div class="th">Date</div>
-        <div class="th">Exam</div>
-        <div class="th">Board</div>
-        <div class="th">Days</div>
-      </div>
-      <tbody id="examTableDesktop"></tbody>
-    </div>
+  <!-- Desktop table -->
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Exam</th>
+        <th>Board</th>
+        <th>Days</th>
+      </tr>
+    </thead>
+    <tbody id="desktopTable"></tbody>
+  </table>
 
-    <!-- Mobile cards -->
-    <div class="cards" id="examCards"></div>
+  <!-- Mobile cards -->
+  <div class="cards" id="mobileCards"></div>
 
-    <footer>
-      <div id="sourceNote"></div>
-      <div style="margin-top:6px"><small>Check your school's timetable for any centre-specific changes.</small></div>
-    </footer>
-  </div>
+  <footer>
+    Check your school's timetable for any centre-specific changes.
+  </footer>
 
   <script>
-    // === Official-board dates (AQA, OCR, Edexcel) used to populate this list.
-    // Sources: AQA May/June 2026 timetable, OCR provisional June 2026 timetable, Edexcel final timetable. (See footer links)
-    // Each item: yyyy-mm-dd (ISO). Times/AM-PM are in the boards' PDFs; page shows date only.
     const exams = [
-      // — AQA (sciences, English, maths, PE, Further Maths)
-      { date: '2026-05-11', name: 'English Literature Paper 1', board: 'AQA' },        // AQA 8702/1
-      { date: '2026-05-12', name: 'Biology Paper 1', board: 'AQA' },                  // 8461/1
-      { date: '2026-05-14', name: 'Maths Paper 1 (Non-Calculator)', board: 'AQA' },  // 8300/1
-      { date: '2026-05-18', name: 'Chemistry Paper 1', board: 'AQA' },               // 8462/1
-      { date: '2026-05-19', name: 'English Literature Paper 2', board: 'AQA' },      // 8702/2
-      { date: '2026-05-21', name: 'English Language Paper 1', board: 'AQA' },        // 8700/1
-      { date: '2026-05-22', name: 'Physical Education Paper 1 (component)', board: 'AQA' }, // 8582/1 (practical/comp details in spec)
-      { date: '2026-06-02', name: 'Physics Paper 1', board: 'AQA' },                 // 8463/1
-      { date: '2026-06-03', name: 'Maths Paper 2 (Calculator)', board: 'AQA' },     // 8300/2
-      { date: '2026-06-05', name: 'English Language Paper 2', board: 'AQA' },       // 8700/2
-      { date: '2026-06-08', name: 'Biology Paper 2', board: 'AQA' },                // 8461/2
-      { date: '2026-06-08', name: 'Further Maths Paper 1 (Level 2 Certificate)', board: 'AQA' }, // 8365/1 (AQA cert)
-      { date: '2026-06-10', name: 'Maths Paper 3 (Calculator)', board: 'AQA' },     // 8300/3
-      { date: '2026-06-12', name: 'Chemistry Paper 2', board: 'AQA' },              // 8462/2
-      { date: '2026-06-15', name: 'Physics Paper 2', board: 'AQA' },                // 8463/2
-      { date: '2026-06-15', name: 'Further Maths Paper 2 (Level 2 Certificate)', board: 'AQA' }, // 8365/2
-      { date: '2026-06-01', name: 'Physical Education Paper 2 (component)', board: 'AQA' }, // 8582/2
+      // === AQA ===
+      {date:'2026-05-11', name:'English Literature Paper 1', board:'AQA'},
+      {date:'2026-05-12', name:'Biology Paper 1', board:'AQA'},
+      {date:'2026-05-14', name:'Maths Paper 1 (Non‑Calculator)', board:'AQA'},
+      {date:'2026-05-18', name:'Chemistry Paper 1', board:'AQA'},
+      {date:'2026-05-19', name:'English Literature Paper 2', board:'AQA'},
+      {date:'2026-05-21', name:'English Language Paper 1', board:'AQA'},
+      {date:'2026-05-22', name:'PE Paper 1', board:'AQA'},
+      {date:'2026-06-02', name:'Physics Paper 1', board:'AQA'},
+      {date:'2026-06-03', name:'Maths Paper 2 (Calculator)', board:'AQA'},
+      {date:'2026-06-05', name:'English Language Paper 2', board:'AQA'},
+      {date:'2026-06-08', name:'Biology Paper 2', board:'AQA'},
+      {date:'2026-06-08', name:'Further Maths Paper 1', board:'AQA'},
+      {date:'2026-06-10', name:'Maths Paper 3 (Calculator)', board:'AQA'},
+      {date:'2026-06-12', name:'Chemistry Paper 2', board:'AQA'},
+      {date:'2026-06-15', name:'Physics Paper 2', board:'AQA'},
+      {date:'2026-06-15', name:'Further Maths Paper 2', board:'AQA'},
+      {date:'2026-06-01', name:'PE Paper 2', board:'AQA'},
 
-      // — OCR (Computer Science, Geography type B)
-      { date: '2026-05-13', name: 'Computer Science Paper 1 (Computer systems)', board: 'OCR' }, // J277/01
-      { date: '2026-05-19', name: 'Computer Science Paper 2 (Algorithms & programming)', board: 'OCR' }, // J277/02
-      { date: '2026-05-13', name: 'Geography (Type B) Paper 1: Our natural world', board: 'OCR' }, // J384/01
-      { date: '2026-06-05', name: 'Geography (Type B) Paper 2: People and society', board: 'OCR' }, // J384/02
-      { date: '2026-06-11', name: 'Geography (Type B) Paper 3: Geographical exploration', board: 'OCR' }, // J384/03
+      // === OCR ===
+      {date:'2026-05-13', name:'Computer Science Paper 1', board:'OCR'},
+      {date:'2026-05-19', name:'Computer Science Paper 2', board:'OCR'},
+      {date:'2026-05-13', name:'Geography Paper 1', board:'OCR'},
+      {date:'2026-06-05', name:'Geography Paper 2', board:'OCR'},
+      {date:'2026-06-11', name:'Geography Paper 3', board:'OCR'},
 
-      // — Edexcel (Business)
-      { date: '2026-05-11', name: 'Business Paper 1', board: 'Edexcel' },   // 1BS0 01
-      { date: '2026-05-21', name: 'Business Paper 2', board: 'Edexcel' }    // 1BS0 02
+      // === Edexcel ===
+      {date:'2026-05-11', name:'Business Paper 1', board:'Edexcel'},
+      {date:'2026-05-21', name:'Business Paper 2', board:'Edexcel'}
     ];
 
-    // utilities
-    function daysUntil(isodate){
+    function daysUntil(dateStr){
       const now = new Date();
-      const d = new Date(isodate + 'T00:00:00'); // local midnight of that date
-      // difference in ms -> days (round up for upcoming)
-      const diff = Math.ceil((d - now) / (1000*60*60*24));
+      const exam = new Date(dateStr + 'T00:00:00');
+      const diff = Math.ceil((exam - now)/(1000*60*60*24));
       return diff < 0 ? 0 : diff;
     }
 
-    function friendlyDate(isodate){
-      const d = new Date(isodate + 'T00:00:00');
-      return d.toLocaleDateString(undefined, {weekday:'short', day:'numeric', month:'short', year:'numeric'});
+    function friendlyDate(dateStr){
+      const d = new Date(dateStr + 'T00:00:00');
+      return d.toLocaleDateString(undefined,{weekday:'short', day:'numeric', month:'short', year:'numeric'});
     }
 
-    function render(){
-      // sort chronologically
+    function renderExams(){
       exams.sort((a,b)=> new Date(a.date) - new Date(b.date));
-      const tbody = document.getElementById('examTableDesktop');
-      const cards = document.getElementById('examCards');
+      const tbody = document.getElementById('desktopTable');
+      const cards = document.getElementById('mobileCards');
       tbody.innerHTML = '';
       cards.innerHTML = '';
 
-      for(const e of exams){
+      exams.forEach(e=>{
         const diff = daysUntil(e.date);
-        const cls = (new Date(e.date).toDateString() === new Date().toDateString()) ? 'today' : (diff === 0 ? 'past' : 'upcoming');
+        const cls = (new Date(e.date).toDateString()===new Date().toDateString()) ? 'today' : (diff===0 ? 'past' : 'upcoming');
 
-        // desktop row
-        const tr = document.createElement('div');
-        tr.className = 'tr ' + cls;
+        // Desktop table row
+        const tr = document.createElement('tr');
+        tr.className = cls;
         tr.innerHTML = `
-          <div class="td">${friendlyDate(e.date)}</div>
-          <div class="td"><strong>${e.name}</strong></div>
-          <div class="td"><small class="meta">${e.board}</small></div>
-          <div class="td"><span class="days ${cls}">${diff}</span></div>
+          <td>${friendlyDate(e.date)}</td>
+          <td>${e.name}</td>
+          <td>${e.board}</td>
+          <td>${diff}</td>
         `;
         tbody.appendChild(tr);
 
-        // mobile card
+        // Mobile card
         const card = document.createElement('div');
         card.className = 'card ' + cls;
         card.innerHTML = `
@@ -165,16 +140,11 @@
           </div>
         `;
         cards.appendChild(card);
-      }
-
-      // footer note with source links
-      const src = document.getElementById('sourceNote');
-      src.innerHTML = 'Dates taken from the official AQA, OCR and Edexcel timetables (AQA May/June 2026; OCR provisional June 2026; Edexcel Summer 2026 timetable).';
+      });
     }
 
     render();
-    // update every hour in case user keeps the page open
-    setInterval(render, 1000 * 60 * 60);
+    setInterval(render, 1000*60*60); // refresh every hour
   </script>
 </body>
 </html>

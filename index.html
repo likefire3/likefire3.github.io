@@ -59,36 +59,53 @@
 
   <script>
     const exams = [
-      // === AQA ===
-      {date:'2026-05-11', name:'English Literature Paper 1', board:'AQA'},
-      {date:'2026-05-12', name:'Biology Paper 1', board:'AQA'},
-      {date:'2026-05-14', name:'Maths Paper 1 (Non-Calculator)', board:'AQA'},
-      {date:'2026-05-18', name:'Chemistry Paper 1', board:'AQA'},
-      {date:'2026-05-19', name:'English Literature Paper 2', board:'AQA'},
-      {date:'2026-05-21', name:'English Language Paper 1', board:'AQA'},
-      {date:'2026-05-22', name:'PE Paper 1', board:'AQA'},
-      {date:'2026-06-02', name:'Physics Paper 1', board:'AQA'},
-      {date:'2026-06-03', name:'Maths Paper 2 (Calculator)', board:'AQA'},
-      {date:'2026-06-05', name:'English Language Paper 2', board:'AQA'},
-      {date:'2026-06-08', name:'Biology Paper 2', board:'AQA'},
-      {date:'2026-06-08', name:'Further Maths Paper 1', board:'AQA'},
-      {date:'2026-06-10', name:'Maths Paper 3 (Calculator)', board:'AQA'},
-      {date:'2026-06-12', name:'Chemistry Paper 2', board:'AQA'},
-      {date:'2026-06-15', name:'Physics Paper 2', board:'AQA'},
-      {date:'2026-06-15', name:'Further Maths Paper 2', board:'AQA'},
-      {date:'2026-06-01', name:'PE Paper 2', board:'AQA'},
+  // === AQA ===
+  {date:'2026-05-11', name:'English Literature Paper 1', board:'AQA'},
+  {date:'2026-05-12', name:'Biology Paper 1', board:'AQA'},
+  {date:'2026-05-14', name:'Maths Paper 1 (Non-Calculator)', board:'AQA'},
+  {date:'2026-05-18', name:'Chemistry Paper 1', board:'AQA'},
+  {date:'2026-05-19', name:'English Literature Paper 2', board:'AQA'},
+  {date:'2026-05-21', name:'English Language Paper 1', board:'AQA'},
+  {date:'2026-05-22', name:'PE Paper 1', board:'AQA'},
+  {date:'2026-06-01', name:'PE Paper 2', board:'AQA'},
+  {date:'2026-06-02', name:'Physics Paper 1', board:'AQA'},
+  {date:'2026-06-03', name:'Maths Paper 2 (Calculator)', board:'AQA'},
+  {date:'2026-06-05', name:'English Language Paper 2', board:'AQA'},
+  {date:'2026-06-08', name:'Biology Paper 2', board:'AQA'},
+  {date:'2026-06-08', name:'Further Maths Paper 1', board:'AQA'},
+  {date:'2026-06-10', name:'Maths Paper 3 (Calculator)', board:'AQA'},
+  {date:'2026-06-12', name:'Chemistry Paper 2', board:'AQA'},
+  {date:'2026-06-15', name:'Physics Paper 2', board:'AQA'},
+  {date:'2026-06-15', name:'Further Maths Paper 2', board:'AQA'},
 
-      // === OCR ===
-      {date:'2026-05-13', name:'Computer Science Paper 1', board:'OCR'},
-      {date:'2026-05-19', name:'Computer Science Paper 2', board:'OCR'},
-      {date:'2026-05-13', name:'Geography Paper 1', board:'OCR'},
-      {date:'2026-06-05', name:'Geography Paper 2', board:'OCR'},
-      {date:'2026-06-11', name:'Geography Paper 3', board:'OCR'},
+  // === AQA French ===
+  {date:'2026-05-15', name:'French Listening', board:'AQA'},
+  {date:'2026-05-15', name:'French Reading', board:'AQA'},
+  {date:'2026-05-22', name:'French Writing', board:'AQA'},
+  
 
-      // === Edexcel ===
-      {date:'2026-05-11', name:'Business Paper 1', board:'Edexcel'},
-      {date:'2026-05-21', name:'Business Paper 2', board:'Edexcel'}
-    ];
+  // === AQA Spanish ===
+  {date:'2026-05-18', name:'Spanish Listening', board:'AQA'},
+  {date:'2026-05-18', name:'Spanish Reading', board:'AQA'},
+  {date:'2026-06-04', name:'Spanish Writing', board:'AQA'},
+ 
+
+  // === OCR ===
+  {date:'2026-05-13', name:'Computer Science Paper 1', board:'OCR'},
+  {date:'2026-05-19', name:'Computer Science Paper 2', board:'OCR'},
+  {date:'2026-05-13', name:'Geography Paper 1', board:'OCR'},
+  {date:'2026-06-05', name:'Geography Paper 2', board:'OCR'},
+  {date:'2026-06-11', name:'Geography Paper 3', board:'OCR'},
+
+  // === Edexcel ===
+  {date:'2026-05-11', name:'Business Paper 1', board:'Edexcel'},
+  {date:'2026-05-21', name:'Business Paper 2', board:'Edexcel'},
+
+  // === Edexcel History ===
+  {date:'2026-05-20', name:'History Paper 1', board:'Edexcel'},
+  {date:'2026-06-03', name:'History Paper 2', board:'Edexcel'},
+  {date:'2026-06-10', name:'History Paper 3', board:'Edexcel'}
+];
 
     // Return number of days between today and exam:
     // positive => days until; 0 => today; negative => days since (passed)

@@ -36,8 +36,8 @@
 <body>
   <h1>GCSE Exam Countdown — Summer 2026</h1>
   <p class="lead">All papers for AQA, OCR, and Edexcel. Dates from official timetables.</p>
+  <p id="examCount" style="text-align:center;font-weight:bold;color:#10b981;margin-top:8px;"></p>
 
-  <!-- Desktop table -->
   <table>
     <thead>
       <tr>
@@ -50,7 +50,6 @@
     <tbody id="desktopTable"></tbody>
   </table>
 
-  <!-- Mobile cards -->
   <div class="cards" id="mobileCards"></div>
 
   <footer>
@@ -59,46 +58,35 @@
 
   <script>
     const exams = [
-  // === AQA ===
-  {date:'2026-05-11', name:'English Literature Paper 1', board:'AQA'},
-  {date:'2026-05-12', name:'Biology Paper 1', board:'AQA'},
-  {date:'2026-05-14', name:'Maths Paper 1 (Non-Calculator)', board:'AQA'},
-  {date:'2026-05-18', name:'Chemistry Paper 1', board:'AQA'},
-  {date:'2026-05-19', name:'English Literature Paper 2', board:'AQA'},
-  {date:'2026-05-21', name:'English Language Paper 1', board:'AQA'},
-  {date:'2026-05-22', name:'PE Paper 1', board:'AQA'},
-  {date:'2026-06-01', name:'PE Paper 2', board:'AQA'},
-  {date:'2026-06-02', name:'Physics Paper 1', board:'AQA'},
-  {date:'2026-06-03', name:'Maths Paper 2 (Calculator)', board:'AQA'},
-  {date:'2026-06-05', name:'English Language Paper 2', board:'AQA'},
-  {date:'2026-06-08', name:'Biology Paper 2', board:'AQA'},
-  {date:'2026-06-08', name:'Further Maths Paper 1', board:'AQA'},
-  {date:'2026-06-10', name:'Maths Paper 3 (Calculator)', board:'AQA'},
-  {date:'2026-06-12', name:'Chemistry Paper 2', board:'AQA'},
-  {date:'2026-06-15', name:'Physics Paper 2', board:'AQA'},
-  {date:'2026-06-15', name:'Further Maths Paper 2', board:'AQA'},
+      {date:'2026-05-11', name:'English Literature Paper 1', board:'AQA'},
+      {date:'2026-05-12', name:'Biology Paper 1', board:'AQA'},
+      {date:'2026-05-14', name:'Maths Paper 1 (Non-Calculator)', board:'AQA'},
+      {date:'2026-05-18', name:'Chemistry Paper 1', board:'AQA'},
+      {date:'2026-05-19', name:'English Literature Paper 2', board:'AQA'},
+      {date:'2026-05-21', name:'English Language Paper 1', board:'AQA'},
+      {date:'2026-05-22', name:'PE Paper 1', board:'AQA'},
+      {date:'2026-06-01', name:'PE Paper 2', board:'AQA'},
+      {date:'2026-06-02', name:'Physics Paper 1', board:'AQA'},
+      {date:'2026-06-03', name:'Maths Paper 2 (Calculator)', board:'AQA'},
+      {date:'2026-06-05', name:'English Language Paper 2', board:'AQA'},
+      {date:'2026-06-08', name:'Biology Paper 2', board:'AQA'},
+      {date:'2026-06-08', name:'Further Maths Paper 1', board:'AQA'},
+      {date:'2026-06-10', name:'Maths Paper 3 (Calculator)', board:'AQA'},
+      {date:'2026-06-12', name:'Chemistry Paper 2', board:'AQA'},
+      {date:'2026-06-15', name:'Physics Paper 2', board:'AQA'},
+      {date:'2026-06-15', name:'Further Maths Paper 2', board:'AQA'},
+      {date:'2026-05-13', name:'Computer Science Paper 1', board:'OCR'},
+      {date:'2026-05-19', name:'Computer Science Paper 2', board:'OCR'},
+      {date:'2026-05-13', name:'Geography Paper 1', board:'OCR'},
+      {date:'2026-06-03', name:'Geography Paper 2', board:'OCR'},
+      {date:'2026-06-11', name:'Geography Paper 3', board:'OCR'},
+      {date:'2026-05-11', name:'Business Paper 1', board:'Edexcel'},
+      {date:'2026-05-21', name:'Business Paper 2', board:'Edexcel'}
+    ];
 
-
-
-  // === OCR ===
-  {date:'2026-05-13', name:'Computer Science Paper 1', board:'OCR'},
-  {date:'2026-05-19', name:'Computer Science Paper 2', board:'OCR'},
-  {date:'2026-05-13', name:'Geography Paper 1', board:'OCR'},
-  {date:'2026-06-03', name:'Geography Paper 2', board:'OCR'},
-  {date:'2026-06-11', name:'Geography Paper 3', board:'OCR'},
-
-  // === Edexcel ===
-  {date:'2026-05-11', name:'Business Paper 1', board:'Edexcel'},
-  {date:'2026-05-21', name:'Business Paper 2', board:'Edexcel'},
-
- 
-];
-
-    // Return number of days between today and exam:
-    // positive => days until; 0 => today; negative => days since (passed)
     function daysUntil(dateStr){
       const today = new Date();
-      today.setHours(0,0,0,0); // normalize to midnight local
+      today.setHours(0,0,0,0);
       const exam = new Date(dateStr + 'T00:00:00');
       exam.setHours(0,0,0,0);
       const msPerDay = 1000 * 60 * 60 * 24;
@@ -111,32 +99,37 @@
     }
 
     function renderExams(){
-      // sort by date ascending
       exams.sort((a,b) => new Date(a.date) - new Date(b.date));
 
       const tbody = document.getElementById('desktopTable');
       const cards = document.getElementById('mobileCards');
+      const examCount = document.getElementById('examCount');
+
       tbody.innerHTML = '';
       cards.innerHTML = '';
 
+      const examsLeft = exams.filter(e => daysUntil(e.date) > 0).length;
+
+      examCount.textContent = `${examsLeft} exam${examsLeft !== 1 ? 's' : ''} remaining`;
+
       exams.forEach(e => {
-        const diff = daysUntil(e.date); // can be negative, zero or positive
+        const diff = daysUntil(e.date);
         let cls;
+
         if (diff === 0) cls = 'today';
         else if (diff < 0) cls = 'past';
         else cls = 'upcoming';
 
-        // Determine display text for days column
         let daysText;
+
         if (diff > 0) {
-          daysText = diff; // number of days until
+          daysText = diff;
         } else if (diff === 0) {
           daysText = 'Today';
         } else {
           daysText = `Passed ${Math.abs(diff)}d`;
         }
 
-        // Desktop table row
         const tr = document.createElement('tr');
         tr.className = cls;
         tr.innerHTML = `
@@ -147,17 +140,15 @@
         `;
         tbody.appendChild(tr);
 
-        // Mobile card
         const card = document.createElement('div');
         card.className = 'card ' + cls;
 
-        // Mobile meta label below the big days number
         let mobileMeta;
+
         if (diff > 0) mobileMeta = 'days';
         else if (diff === 0) mobileMeta = 'Today';
         else mobileMeta = `${Math.abs(diff)} days ago`;
 
-        // Show numeric days for upcoming, 'Today' for today, and "Passed X days ago" for past
         card.innerHTML = `
           <div class="row">
             <div>
@@ -165,7 +156,9 @@
               <div class="meta">${e.board} • ${friendlyDate(e.date)}</div>
             </div>
             <div style="text-align:right">
-              <div class="days ${cls}">${diff > 0 ? diff : (diff === 0 ? 'Today' : Math.abs(diff))}</div>
+              <div class="days ${cls}">
+                ${diff > 0 ? diff : (diff === 0 ? 'Today' : Math.abs(diff))}
+              </div>
               <div class="meta">${mobileMeta}</div>
             </div>
           </div>
@@ -174,9 +167,8 @@
       });
     }
 
-    // initial render and periodic refresh
     renderExams();
-    setInterval(renderExams, 1000 * 60 * 60); // refresh every hour
+    setInterval(renderExams, 1000 * 60 * 60);
   </script>
 </body>
 </html>
